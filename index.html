@@ -1,8 +1,8 @@
 <html>
 <head>
-<link rel="stylesheet" href='http://10.10.31.254/Mobile-Web/busapp/jquery.mobile-1.4.4.min.css'/>
-<script type="text/javascript" src="http://10.10.31.254/Mobile-Web/busapp/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src='http://10.10.31.254/Mobile-Web/busapp/jquery.mobile-1.4.4.min.js'></script>
+<link rel="stylesheet" href='http://10.10.29.146/Mobile-Web/busapp/jquery.mobile-1.4.4.min.css'/>
+<script type="text/javascript" src="http://10.10.29.146/Mobile-Web/busapp/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src='http://10.10.29.146/Mobile-Web/busapp/jquery.mobile-1.4.4.min.js'></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false">
 </script> 
 <script>
@@ -96,7 +96,7 @@ $(document).ready(function(){
     {
       var diff = a-1;
     	$('#seats').text(diff);
-    	var u ="http://10.10.31.254/Mobile-Web/busapp/index_json.php?cmd=3&id=1&s="+diff+"&l="+l;
+    	var u ="http://10.10.29.146/Mobile-Web/busapp/index_json.php?cmd=3&id=1&s="+diff+"&l="+l;
       var num_passengers = parseInt($('#embarked').text(), 10);
       num_passengers ++;
       $('#embarked').text(num_passengers);
@@ -113,22 +113,22 @@ $(document).ready(function(){
 	if(b < 35 && b >= 0) {
 	var sum = b+1;
 	$('#seats').text(sum);
-	var u ="http://10.10.31.254/Mobile-Web/busapp/index_json.php?cmd=3&id=1&s="+sum+"&l="+l;;
+	var u ="http://10.10.29.146/Mobile-Web/busapp/index_json.php?cmd=3&id=1&s="+sum+"&l="+l;;
 	return syncAjax(u);
   }
   });
 //reset function
   $("#reset").click(function(){
-  	r=syncAjax("http://10.10.31.254/Mobile-Web/busapp/index_json.php?cmd=1&id=1");
+  	r=syncAjax("http://10.10.29.146/Mobile-Web/busapp/index_json.php?cmd=1&id=1");
 	$('#seats').text(r.busapp.default_seats);
   $('#embarked').text(0);
   });
   
  //get Reservations
  $("#get_res").click(function(){
- r=syncAjax("ihttp://10.10.31.254/Mobile-Web/busapp/ndex_json.php?cmd=5");
+ r=syncAjax("ihttp://10.10.29.146/Mobile-Web/busapp/ndex_json.php?cmd=5");
  $('#list').text(r.busapp.number);
- r=syncAjax("http://10.10.31.254/Mobile-Web/busapp/index_json.php?cmd=4");
+ r=syncAjax("http://10.10.29.146/Mobile-Web/busapp/index_json.php?cmd=4");
  for (var i = 0; i < r.busapp.length; i++)
  {
    var names = r.busapp[i].name+ " is currently at "+ r.busapp[i].location;
