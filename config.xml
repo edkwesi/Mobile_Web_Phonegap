@@ -6,10 +6,11 @@
         id        = "com.phonegap.bus_app"
         version   = "1.0.0">
 
-    <name>Bus App</name>
+
+    <name>(Bus App) Passenger App</name>
 
     <description>
-        Driver side bus application that updates broadcasts seat availability  and bus location.
+        Passenger app that gives the passenger updates on seat availability in the bus and the bus location.
     </description>
 
     <author href="http://www.twitter.com/kwesiAnaglo" email="edem.anaglo@ashesi.edu.gh">
