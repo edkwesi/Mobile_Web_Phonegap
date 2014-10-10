@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <widget  xmlns = "http://www.w3.org/ns/widgets"
+ 	  xmlns:gap = "http://phonegap.com/ns/1.0"
+ 	         id ="edkwesi"
+ 	versionCode ="11"
+ 	version     ="1.0.0">
+
+ 	<gap:plugin	name="com.phonegap.plugins.barcodescanner"/>	
+
+ 	<name>Mobile Web 1</name>
+ 	<description> First Prototype </description>
+
+ 	<author href="https://www.ashesi.edu.gh" email="edem.anaglo@ashesi.edu.gh">Edem Jeff Kwesi Anaglo
+ 	</author>
+
+ </widget>
+
+
+
+
+
+
+
