@@ -6,10 +6,10 @@
         id        = "com.phonegap.bus_app"
         version   = "1.0.0">
 
-    <name>Hello World</name>
+    <name>Bus App</name>
 
     <description>
-        Hello World sample application that responds to the device ready event.
+        Driver side bus application that updates broadcasts seat availability  and bus location.
     </description>
 
     <author href="http://www.twitter.com/kwesiAnaglo" email="edem.anaglo@ashesi.edu.gh">
