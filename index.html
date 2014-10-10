@@ -1,257 +1,95 @@
 <html>
-<head>
+	<head>
 <link rel="stylesheet" href='http://50.63.128.135/~csashesi/class2015/edem-anaglo/busapp/jquery.mobile-1.4.4.min.css'/>
 <script type="text/javascript" src="http://50.63.128.135/~csashesi/class2015/edem-anaglo/busapp/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src='http://50.63.128.135/~csashesi/class2015/edem-anaglo/busapp/jquery.mobile-1.4.4.min.js'></script>
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false">
-</script> 
 <script>
-
-  var geocoder;
- 
-  if (navigator.geolocation) 
-  {
-    navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
-  } 
-  
-  //Get the latitude and the longitude;
-  function successFunction(position) 
-  {
-    var lat = position.coords.latitude;
-    var lng = position.coords.longitude;
-    codeLatLng(lat, lng)
-  }
- 
-  function errorFunction()
-  {
-    alert("Geocoder failed");
-  }
- 
-  function initialize() 
-  {
-    geocoder = new google.maps.Geocoder();
-  }
- 
-  function codeLatLng(lat, lng)
-  {
- 
-    var latlng = new google.maps.LatLng(lat, lng);
-    geocoder.geocode({'latLng': latlng}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK)
-       {
-      console.log(results)
-        if (results[1]) 
-        {
-           //formatted address
-         $('#location').text(results[0].formatted_address)
-          //find country name
-             for (var i=0; i<results[0].address_components.length; i++) 
-             {
-                for (var b=0;b<results[0].address_components[i].types.length;b++) 
-                {
-                    //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
-                 if (results[0].address_components[i].types[b] == "administrative_area_level_1") 
-                  {
-                      //this is the object you are looking for
-                      city= results[0].address_components[i];
-                      break;
-                  }
-                }
-              }
-        
-        }
-         else
-        {
-          $('#location').text("No results found");
-        }
-      }
-      else
-      {
-        $('#location').text("Geocoder failed due to: " + status);
-      }
-    });
-  }
-
-		function syncAjax(u)
-     {
-		  console.log(u);
-			var obj=$.ajax(
-					{url:u,
-					 async:false
-					}
-				);
-				console.log(obj.responseText);
-				return $.parseJSON(obj.responseText);
-				
-			}
-	
-			
-$(document).ready(function(){
-//join function
-  $("#join").click(function()
-  {
-    var a = parseInt($('#seats').text(), 10);
-  	var l = document.getElementById('location').innerHTML;
-  	if(a <= a && a > 0)
-    {
-      var diff = a-1;
-    	$('#seats').text(diff);
-    	var u ="http://50.63.128.135/~csashesi/class2015/edem-anaglo/busapp/index_json.php?cmd=3&id=1&s="+diff+"&l="+l;
-      var num_passengers = parseInt($('#embarked').text(), 10);
-      num_passengers ++;
-      $('#embarked').text(num_passengers);
-      var revenue = parseInt($('#profit').text(),10);
-      revenue = num_passengers * 30;
-      $('#profit').text(revenue);
-      return syncAjax(u);
+	function syncAjax(u)
+	{
+		console.log(u);
+		var obj=$.ajax({url:u,async:false});
+		console.log(obj.responseText);
+		return $.parseJSON(obj.responseText);
 	}
-//left function	
-  });
-  $("#left").click(function(){
-	var b = parseInt($('#seats').text(),10);
-	var l = document.getElementById('location').innerHTML;
-	if(b < 35 && b >= 0) {
-	var sum = b+1;
-	$('#seats').text(sum);
-	var u ="http://50.63.128.135/~csashesi/class2015/edem-anaglo/busapp/index_json.php?cmd=3&id=1&s="+sum+"&l="+l;;
-	return syncAjax(u);
-  }
-  });
-//reset function
-  $("#reset").click(function(){
-  	r=syncAjax("http://50.63.128.135/~csashesi/class2015/edem-anaglo/busapp/index_json.php?cmd=1&id=1");
-	$('#seats').text(r.busapp.default_seats);
-  $('#embarked').text(0);
-  $('#profit').text(0);
-  });
-  
- //get Reservations
- $("#get_res").click(function(){
- r=syncAjax("http://50.63.128.135/~csashesi/class2015/edem-anaglo/busapp/index_json.php?cmd=5");
- $('#list').text(r.busapp.number);
- r=syncAjax("http://50.63.128.135/~csashesi/class2015/edem-anaglo/busapp/index_json.php?cmd=4");
- for (var i = 0; i < r.busapp.length; i++)
- {
-   var names = r.busapp[i].name+ " is currently at "+ r.busapp[i].location;
-   $('<li>'+ names + '</li>').appendTo($('#flow'));
- }
- });
 
+$(document).ready(function()
+{
+	//Reset function
+	$("#reset").click(function(){
+		r=syncAjax("http://50.63.128.135/~csashesi/class2015/edem-anaglo/busapp/index_json.php?cmd=1&id=1");
+		$('#seats').text(r.busapp.seats);
+	});
+
+	$("#locate").click(function(){
+		l=syncAjax("http://50.63.128.135/~csashesi/class2015/edem-anaglo/busapp/index_json.php?cmd=1&id=9");
+		$('#locattion').text(r.busapp.location);
+	})
+
+	$('#reserve').click(function() {
+		$('.ul_current').append('<li>' +$('#res').val());
+	})
 });
+
 </script>
-</head>
-<body onload="initialize()">
+	</head>
+		<body>
 
-<!--DRIVER-->
-<div data-role="page" id="home">
-<div data-role="header">
-<div data-role="navbar">
-	<ul>	
-	 <li>
-    <a	href="#passengers" data-transition="flip" data-icon="info">Passengers</a>
-  </li>
-		<h1 align="center">Tha Cartel Bus App</h1>
-	<li>
-    <a	href="#reserve" data-transition="pop" data-icon="carat-r">Reservations</a>
-  </li>
-</div>
-</div>
-<div role="main" class="ui-content" align="left">
-<p style='font-size:80%'>Passenger Count</p>
-<p id='embarked' style='font-size:100%'>0</p>
-<p style='font-size:80%'>Total Revenue Collected(GhC)</p>
-<p id='profit' style='font-size:100%'>0.00</p>
-</div>
-<div role="main" class="ui-content" align="center">
-  <p style='font-size: 200%'>Available Seats</p> 
-  <p id='seats' style='font-size:450%'>0</p>
-  <p id='location' style='font-size:150%'>Searching....</p>
+		<!--Passenger-->
+		<div data-role="page" id="home">
+			<div data-role="haeder">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#home" data-transition="pop" data-icon="home">Home</a></li>
+						<h1 align="center">The Cartel Bus App</h1>
+						<li><a href="#reserve" data-transition="pop" data-icon="carat-r">Make Reservations</a></li>
+					</ul>
+				</div>
+			</div>
 
-  <div data-role="controlgroup" data-type="horizontal"> 
-    <button id="join" data-icon="plus">JOINED</button>
-    <button id="reset" data-icon="refresh">RESET</button>
-    <button id="left" data-icon="minus">LEFT</button>
-  </div>
-</div>
-<!--<div data-role="controlgroup" class="ui-content" align="center">
-<div data-role="controlgroup" data-type="horizontal">
-  <li>
-    <a  href="#passengers" data-transition="flip" data-icon="info">PASSENGERS</a>
-  </li>
-</div>
-</div>-->
-<div data-role="footer">
-  <h1>Developed By: General Lopie n Tha Cartel</h1>
-</div>
+		<div role="main" class="ui-content" align="center">
+			<p style='font-size:200%'>Avialiable Seats</p>
+			<p id='seats' style='font-size:350%'>0</p>
+			<br>
+			<br>
+			<p style='font-size:200%'>Bus location</p>
+			<p id='location' style='font-size:200%'>Searching....</p>
+			<br>
+			<br>
+			<div data-role="controlgroup" data-type="horizontal">
+				<button id="reset" data-icon="refresh">REFRESH</button>
+			</div>
+		</div>
+			<div data-role="footer">
+				<h1>Developed by :Edem Anaglo</h1>
+			</div>
+		</div>
+		<!-- Making reservations-->
+		<div data-role="page" id="reserve">
+			<div data-role="haeder">
+				<div data-role="navbar">
+					<ul>
+						<li>
+							<a href="#home" data-transition="flip" data-icon="home">Home</a>
+						</li>
+						<h1 align="center">The Cartel Bus App</h1>
+						<li>
+							<a href="#reserve" data-transition="pop" data-icon="carat-r">Make Reservations</a>
+						</li>
+					</ul>
+				</div>
+			</div>
 
-</div>
-
-<!--RESERVATIONS-->
-<div data-role="page" id="reserve">
-<div data-role="header">
-  <div data-role="navbar">
-  	<ul>	
-  	<li><a	href="#home" data-transition="pop" data-icon="home">Home</a></li>
-  	<h1 align="center">Tha Cartel Bus App</h1>
-  	<li><a	href="#reserve" data-transition="pop" data-icon="carat-r">Reservations</a></li>
-  	</ul>
-  </div>
-</div>
-
-<div role="main" class="ui-content" align="center">
-  <button id="get_res">Reservations</button>
-  <div id="list" style="font-size:400%">
-    0
-  </div>
-</div>
-<div role="main" class="ui-content" align="left">
-  <ul id="flow">
-
-  </ul>
-</div>
-
-<!--
-  <div datarole="listview" class="ui-content" align="center">
-  <button id="list"> Reservations List </button>
-  <div id="list" style="font-size:100%">
-  <p id='' style='font-size:100%'></p>
-  </div>
-  </div>
--->
-
-<div data-role="footer">
-  <h1>Developed By: General Lopie n Tha Cartel</h1>
-</div>
-
-</div>
-
-
-<!--Passengers-->
-<div data-role="page" id="passengers">
-<div data-role="header">
-<div data-role="navbar">
-  <ul>  
-  <li><a  href="#home" data-transition="pop" data-icon="home">Home</a></li>
-  <h1 align="center">Tha Cartel Bus App</h1>
-  <li><a  href="#reserve" data-transition="pop" data-icon="carat-r">Reservations</a></li>
-  </ul>
-</div>
-</div>
-
-
-
-<div role="main" class="ui-content" align="center">
-<button id="list"> Reservations List </button>
-<div id="list" style="font-size:100%">
-<p id='' style='font-size:100%'></p>
-</div>
-
-</div>
-
-<div data-role="footer">
-  <h1>Developed By: General Lopie n Tha Cartel</h1>
-</div>
-
-</div>
-</body>
+		<div role="main" class="ui-content" align="center">
+			<p id='seats' style='font-size:500%'></p>
+			<br>
+			<br>
+			<div data-role="controlgroup" data-type="horizontal">
+				<button id="reset" data-icon="refresh">Reserve</button>
+			</div>
+		</div>
+			<div data-role="footer">
+				<h1>Developed by :......</h1>
+			</div>
+		</div>
+		</body>
 </html>
